@@ -1,2 +1,29 @@
-# Shark-Byte-AI
-Shark Byte is an AI, it allows you to run multiple ollama models in a clean ui, you can choose between terminal, and index.html, opens in newtab. This is a BETA PROJECT, new things are coming, and so are bug fixes. You can eaither download the zip, and follow the instructions, extract, then run the .bat file, OR download everything, and delete the .zip folder, then run it, eaither way works, i guess. All commands are going to be here in the README.md soon, within a day or two, with better directions (pardon me for forgetting to create it before uploading the project). Additionally, a Shark Byte Beta llm is coming out, first with a 500 million parameter model, and then a 1 billion parameter model, we are currently training the 500 million one we made, the 1 billion one is next. This might take some time, but in the meanwhile, enjoy!
+## Shark Byte AI
+
+**Shark Byte** is an AI interface that lets you run multiple Ollama models through a clean, user-friendly UI. Choose between a terminal or a web interface (opens in a new tab).
+
+### About This Beta
+
+This is a **beta project** with new features and bug fixes coming soon.
+
+### Installation & Setup
+
+You have two options:
+
+1. **Download the ZIP file** → Follow the included instructions → Extract → Run the `.bat` file
+2. **Download everything** → Delete the ZIP folder → Run the application
+
+Both methods work fine.
+
+### Commands & Documentation
+
+All commands will be documented in the `README.md` file within the next day or two, with clearer setup directions. (Sorry for the delay on that!)
+
+### Shark Byte Beta LLM
+
+A custom Shark Byte LLM is in development:
+
+- **First release**: 500M parameter model (currently training)
+- **Second release**: 1B parameter model (coming next)
+
+Training takes time, but stay tuned—more updates coming soon! In the meantime, enjoy the interface.
