@@ -21,12 +21,10 @@ All commands will be documented in the `README.md` file within the next day or t
 
 ### Shark Byte Beta LLM
 
-* **Note:** This LLM is made by me and my team (just me), we don't *know* when it'll come out, or how it will respond. Anything it say's, or does is **not** our responsibility, any feedback will be taken happily. We would like any feedback to help improve `Shark Byte`, thank you for your understanding.
-
-
 A custom Shark Byte LLM is in development:
 
 - **First release**: 500M parameter model (currently training)
 - **Second release**: 1B parameter model (coming next)
+* **Note:** This LLM is made by me and my team (just me), we don't *know* when it'll come out, or how it will respond. Anything it say's, or does is **not** our responsibility, any feedback will be taken happily. We would like any feedback to help improve `Shark Byte`, thank you for your understanding.
 
 Training takes time, but stay tuned—more updates coming soon! In the meantime, enjoy the interface.
