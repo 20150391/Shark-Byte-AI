@@ -19,9 +19,10 @@ Both methods work fine.
 
 All commands will be documented in the `README.md` file within the next day or two, with clearer setup directions. (Sorry for the delay on that!)
 
+### Shark Byte Beta LLM
+
 * **Note:** This LLM is made by me and my team (just me), we don't *know* when it'll come out, or how it will respond. Anything it say's, or does is **not** our responsibility, any feedback will be taken happily. We would like any feedback to help improve `Shark Byte`, thank you for your understanding.
 
-### Shark Byte Beta LLM
 
 A custom Shark Byte LLM is in development:
 
