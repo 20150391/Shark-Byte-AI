@@ -4,7 +4,6 @@ SharkByte is a local AI assistant powered by Ollama. It includes a terminal inte
 
 ## What's new in this update
 
-* **Bro Mode uses `llama3.2:3b`**, not the 1B model. Its detailed personality instructions are intentionally retained; only the model routing was corrected. The browser interface default is also updated, including migration of an old saved Bro model selection.
 * **Long code blocks become project downloads.** Code blocks at least 3,500 characters or 70 lines are marked with an orange file card showing the generated filename and extension. The Download Folder control creates a named project folder and a ZIP containing the source file and a small README. Shorter blocks remain individual code downloads.
 * **Edit File** is available from the `/` menu and through `/edit-file`. SharkByte reads a selected text file, prepares a proposed edit with the coding model, shows a preview, and does not write anything until you explicitly type `WRITE`. A `.bak` backup is created before the approved replacement.
 * **Localhost API keys** can be generated, named, listed, renamed, and deleted. Keys are saved in SharkByte's local data directory. The API server binds only to `127.0.0.1` and starts with SharkByte.
@@ -60,11 +59,8 @@ py -m pip install -r requirements.txt
 |`/coder`|`qwen2.5-coder:1.5b`|Coding and debugging|
 |`/deep-thinking`|`qwen3:0.6b`|Reasoning-focused answers|
 |`/casual`|`gemma3:1b`|Casual conversation|
-|`/bro`|`llama3.2:3b`|Playful, skeptical, casual conversation|
 |Agent coordinator|`qwen3:0.6b`|Coordinates background-agent research|
 |Embedding helper|`embeddinggemma-2:270m`|Used by the standalone embedding helper|
-
-Bro Mode's prompt is deliberately detailed to enforce its personality and style. It is not a 1B configuration in this update.
 
 ## Ollama model support
 
@@ -113,7 +109,6 @@ Commands are typed into the SharkByte terminal. Replace placeholders such as `QU
 |`/coder \\\[MESSAGE]`|Switch to Coder mode; optionally send a message.|
 |`/deep-thinking \\\[QUESTION]`|Switch to Deep Thinking mode; optionally send a question.|
 |`/casual \\\[MESSAGE]`|Switch to Casual mode; optionally send a message.|
-|`/bro \\\[MESSAGE]`|Switch to Bro mode; optionally send a message.|
 |`/embed \\\[TEXT]`|Alias for Casual mode in this command handler.|
 |`/help`|Show the command and keyboard help panel.|
 |`/agents`|Open the persistent background-agents view.|
