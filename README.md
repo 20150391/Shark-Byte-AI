@@ -11,7 +11,7 @@ SharkByte is a local AI assistant powered by Ollama. It includes a terminal inte
 ## Requirements
 
 * Windows is the primary supported setup described here.
-* Python 3.10 or newer.
+* Python 3.10 or newer (max is 3.13 for now).
 * [Ollama](https://ollama.com/download), installed and running.
 * The existing `sharkbyte\\\_browser.py` helper module must remain beside `app.py` because the application imports it for web research.
 
