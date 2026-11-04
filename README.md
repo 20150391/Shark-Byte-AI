@@ -24,17 +24,15 @@ py -m pip install -r requirements.txt
 
 ## Installation / update
 
-1. Close SharkByte.
-2. Extract the update files into your SharkByte project folder, keeping the `web` subfolder structure.
-3. Replace `app.py`, `sharkbyte\\\_agent\\\_worker.py`, `requirements.txt`, and `web/sharkbyte-polished.html` with the supplied versions.
-4. Keep your existing `sharkbyte\\\_browser.py` file in the same folder as `app.py`.
-5. Install or update Python dependencies:
+1. Run `Install-Program.bat`
+2. Check python version `python --version`
+3. Install or update Python dependencies:
 
 ```powershell
    py -m pip install -r requirements.txt
    ```
 
-6. Download the configured models if they are not already installed:
+4. Download the configured models if they are not already installed:
 
 ```powershell
    ollama pull qwen3:0.6b
@@ -45,7 +43,7 @@ py -m pip install -r requirements.txt
    ollama pull embeddinggemma-2:270m
    ```
 
-7. Start SharkByte:
+5. Start SharkByte:
 
 ```powershell
    py app.py
