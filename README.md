@@ -7,6 +7,7 @@ SharkByte is a local AI assistant powered by Ollama. It includes a terminal inte
 * **Long code blocks become project downloads.** Code blocks at least 3,500 characters or 70 lines are marked with an orange file card showing the generated filename and extension. The Download Folder control creates a named project folder and a ZIP containing the source file and a small README. Shorter blocks remain individual code downloads.
 * **Edit File** is available from the `/` menu and through `/edit-file`. SharkByte reads a selected text file, prepares a proposed edit with the coding model, shows a preview, and does not write anything until you explicitly type `WRITE`. A `.bak` backup is created before the approved replacement.
 * **Localhost API keys** can be generated, named, listed, renamed, and deleted. Keys are saved in SharkByte's local data directory. The API server binds only to `127.0.0.1` and starts with SharkByte.
+* *Install-Programs.bat* downloads everything needed to run `app.py`.
 
 ## Requirements
 
