@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1020">
+<title>SharkByte</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{color-scheme:dark;--bg:#0a0f1b;--side:#0d1422;--panel:#121c2d;--panel2:#18243a;--line:#25344c;--text:#edf3ff;--muted:#8b9ab2;--accent:#39a7ff;--accent2:#1d80df;--user:#172b45;--shadow:0 18px 60px #0005}
+body[data-theme="light"]{color-scheme:light;--bg:#f4f7fb;--side:#fff;--panel:#fff;--panel2:#edf2f8;--line:#dce4ef;--text:#172338;--muted:#69788f;--accent:#087fe5;--accent2:#0069c5;--user:#e8f2ff;--shadow:0 16px 45px #23334b14}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif;overflow:hidden;transition:background .2s,color .2s}button,textarea,select{font:inherit}button{cursor:pointer;color:inherit}
+.app{height:100dvh;min-height:0;display:grid;grid-template-columns:278px minmax(0,1fr)}
+.sidebar{background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:20px 14px;min-height:0}
+.brand{display:flex;align-items:center;gap:11px;padding:2px 8px 24px}.logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(145deg,#53c7ff,#1476d7);display:grid;place-items:center;color:white;font-weight:900;box-shadow:0 7px 22px #168bff45}.brand strong{font-size:17px;letter-spacing:-.5px}.brand small{display:block;color:var(--muted);font:10px 'DM Mono',monospace;letter-spacing:1.5px;margin-top:2px}
+.newchat{width:100%;padding:12px 13px;border:1px solid var(--line);background:var(--panel);border-radius:12px;text-align:left;font-weight:700}.newchat:hover,.history-item:hover{background:var(--panel2)}.newchat span{color:var(--accent);font-size:18px;margin-right:9px}
+.side-label{font:10px 'DM Mono',monospace;color:var(--muted);letter-spacing:1.5px;padding:24px 9px 9px}.history{overflow:auto;min-height:80px;flex:1}.history-item{width:100%;display:flex;align-items:center;gap:9px;padding:10px;border:0;background:transparent;border-radius:10px;text-align:left;color:var(--muted);font-size:12px;margin:2px 0}.history-item.active{background:var(--panel2);color:var(--text)}.history-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.delete-chat{opacity:0;border:0;background:transparent;color:var(--muted);font-size:17px;padding:0 3px}.history-item:hover .delete-chat{opacity:1}
+.terminal-note{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:12px;margin-top:14px}.terminal-note strong{font-size:11px}.terminal-note p{font-size:10px;line-height:1.6;color:var(--muted);margin:6px 0 0}.side-bottom{padding:13px 8px 0;color:var(--muted);font:10px 'DM Mono',monospace;display:flex;justify-content:space-between;align-items:center}
+.main{min-width:0;min-height:0;display:flex;flex-direction:column;position:relative}.topbar{min-height:66px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:10px 28px;gap:12px}.top-left{display:flex;align-items:center;gap:12px;min-width:0}.crumb{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.connection{font:10px 'DM Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:7px}.dot{width:7px;height:7px;border-radius:50%;background:#e4a33b}.dot.ok{background:#27c987;box-shadow:0 0 10px #27c98777}
+.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.iconbtn,.rename{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:8px 11px;font-size:11px}.iconbtn{font-size:15px;width:36px;height:36px;padding:0}.rename:hover,.iconbtn:hover{border-color:var(--accent)}.model-select,.mode-select{max-width:220px;min-width:125px;background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:9px 28px 9px 11px;font-size:11px;outline:none}.mode-select{border-color:#287fba}
+.chatstage{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scroll-behavior:smooth}.inner{width:min(850px,calc(100% - 48px));margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:35px 0 150px}
+.welcome{margin:auto 0;text-align:center;padding:30px 0 55px}.orb{width:62px;height:62px;border-radius:22px;background:linear-gradient(145deg,#55c9ff,#1676d5);display:grid;place-items:center;color:white;font-size:27px;font-weight:900;margin:0 auto 22px;box-shadow:0 12px 38px #168bff40}.welcome h1{font-size:clamp(27px,4vw,40px);letter-spacing:-1.8px;margin:0 0 10px}.welcome p{color:var(--muted);font-size:13px;margin:0 0 28px}.suggestions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:610px;margin:auto}.suggestion{border:1px solid var(--line);background:var(--panel);padding:14px;border-radius:13px;text-align:left;font-size:11px;color:var(--text);line-height:1.5}.suggestion:hover{border-color:var(--accent);transform:translateY(-1px)}.suggestion small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.messages{display:flex;flex-direction:column;gap:24px}.message{display:grid;grid-template-columns:34px minmax(0,1fr);gap:13px;align-items:start}.avatar{width:32px;height:32px;border-radius:11px;background:linear-gradient(145deg,#55c9ff,#1676d5);display:grid;place-items:center;color:white;font-size:12px;font-weight:800}.message.user .avatar{background:var(--panel2);color:var(--text)}.content{min-width:0}.who{font-size:11px;font-weight:800;margin:1px 0 7px}.bubble{font-size:13px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}.message.user .bubble{background:var(--user);border:1px solid var(--line);padding:11px 14px;border-radius:4px 13px 13px 13px;display:inline-block;max-width:100%}.msgtools{display:flex;gap:12px;margin-top:7px}.msgtools button{border:0;background:transparent;color:var(--muted);font-size:10px;padding:3px 0}.msgtools button:hover{color:var(--accent)}
+.thinking-panel{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);overflow:hidden}.thinking-panel summary{cursor:pointer;padding:9px 11px;color:var(--muted);font:10px 'DM Mono',monospace;letter-spacing:.5px}.thinking-text{padding:0 11px 11px;color:var(--muted);font-size:11px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow:auto}
+.composer-wrap{position:absolute;bottom:0;left:0;right:0;padding:20px 24px 24px;background:linear-gradient(0deg,var(--bg) 75%,transparent)}.composer{width:min(850px,100%);margin:auto;border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:13px 14px 10px;box-shadow:var(--shadow)}.composer textarea{display:block;width:100%;min-height:46px;max-height:180px;resize:vertical;border:0;outline:0;background:transparent;color:var(--text);font-size:13px;line-height:1.6;padding:3px 4px}.composer textarea::placeholder{color:var(--muted)}.composer-foot{display:flex;justify-content:space-between;align-items:center;padding:7px 2px 0}.hint{font-size:10px;color:var(--muted)}.send{width:36px;height:36px;border:0;border-radius:11px;background:var(--accent);color:white;font-size:17px;font-weight:800}.send:hover{background:var(--accent2)}.send:disabled{opacity:.45;cursor:not-allowed}.statusline{font:10px 'DM Mono',monospace;color:var(--muted);margin-top:8px;min-height:14px;text-align:center}.empty{color:var(--muted);font-size:11px;padding:12px 9px;line-height:1.6}
+@media(max-width:900px){.topbar{padding:10px 14px;align-items:flex-start}.top-actions{max-width:65%}.mode-select,.model-select{max-width:170px;min-width:110px}}
+@media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{display:none}.topbar{padding:10px 12px;gap:8px}.top-left{padding-top:8px}.inner{width:calc(100% - 28px);padding-top:22px}.composer-wrap{padding:12px 12px 16px}.mode-select,.model-select{max-width:145px;min-width:105px;padding:8px 20px 8px 8px}.connection{display:none}.suggestions{grid-template-columns:1fr}.rename{padding:8px;font-size:10px}.welcome{padding-bottom:100px}}
+@media(max-width:480px){.topbar{flex-wrap:wrap}.top-left{width:100%}.top-actions{max-width:100%;width:100%;justify-content:flex-start}.mode-select,.model-select{flex:1;max-width:none}.iconbtn{flex:0 0 36px}.rename{flex:0 0 auto}}
+</style>
+</head>
+<body data-theme="dark">
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="logo">S</div><div><strong>SharkByte</strong><small>LOCAL AI</small></div></div>
+  <button class="newchat" onclick="newChat()"><span>＋</span> New chat</button>
+  <button class="newchat" style="margin-top:8px" onclick="deleteAllChats()"><span>×</span> Delete all chats</button>
+  <div class="side-label">RECENT CONVERSATIONS</div>
+  <div class="history" id="history"></div>
+  <div class="terminal-note"><strong>More SharkByte tools</strong><p>Model downloads, agents, Work Mode, settings, and <code>/embed</code> are managed in the SharkByte terminal.</p></div>
+  <div class="side-bottom"><span>LOCAL WORKSPACE</span><span>● PRIVATE</span></div>
+</aside>
+<main class="main">
+  <header class="topbar">
+    <div class="top-left"><div class="crumb" id="crumb">New chat</div><div class="connection"><span class="dot" id="dot"></span><span id="connectionText">Connecting to Ollama…</span></div></div>
+    <div class="top-actions">
+      <select class="mode-select" id="modeSelect" title="Choose SharkByte mode">
+        <option value="chat">/chat</option>
+        <option value="casual">/casual</option>
+        <option value="deep-thinking">/deep-thinking</option>
+        <option value="coder">/coder</option>
+      </select>
+      <select class="model-select" id="modelSelect" title="Choose an installed Ollama model"><option>Loading downloaded models…</option></select>
+      <button class="rename" onclick="renameChat()" title="Rename this conversation">✎ Rename</button>
+      <button class="iconbtn" id="themeBtn" onclick="toggleTheme()" title="Toggle light/dark theme">☼</button>
+    </div>
+  </header>
+  <div class="chatstage" id="stage">
+    <div class="inner">
+      <section class="welcome" id="welcome">
+        <div class="orb">S</div><h1>What can I help with?</h1>
+        <p>Your local AI workspace. Connected directly to Ollama on this computer.</p>
+        <div class="suggestions">
+          <button class="suggestion" onclick="usePrompt('Explain a difficult topic in simple terms.')">Explain something<small>Break down a tricky concept</small></button>
+          <button class="suggestion" onclick="setModeAndPrompt('coder','Help me write clean, working Python code for: ')">Write some code<small>Switch to /coder mode</small></button>
+          <button class="suggestion" onclick="setModeAndPrompt('deep-thinking','Think carefully through this problem: ')">Deep thinking<small>Switch to /deep-thinking mode</small></button>
+          <button class="suggestion" onclick="usePrompt('Summarize this for me: ')">Summarize text<small>Get the important points</small></button>
+        </div>
+      </section>
+      <section class="messages" id="messages"></section>
+    </div>
+  </div>
+  <div class="composer-wrap">
+    <div class="composer">
+      <textarea id="prompt" rows="2" placeholder="Message SharkByte… (Enter to send, Shift + Enter for a new line)"></textarea>
+      <div class="composer-foot"><span class="hint" id="modelHint">Local Ollama · ready when connected</span><button class="send" id="sendBtn" onclick="sendMessage()">↑</button></div>
+    </div>
+    <div class="statusline" id="statusline"></div>
+  </div>
+</main>
+</div>
+
+<script>
+const OLLAMA='/api/ollama';
+const DEFAULT_MODELS={
+  chat:'qwen3:0.6b',
+  casual:'gemma3:1b',
+  'deep-thinking':'qwen3:0.6b',
+  coder:'qwen2.5-coder:1.5b',
+  bro:'qwen3:0.6b'
+};
+
+const MODE_PROMPTS={
+  chat:`You are SharkByte, a helpful general-purpose assistant. Be accurate, clear, useful, and friendly. Admit uncertainty when appropriate. Follow the user's requested format and level of detail.`,
+  casual:`You are SharkByte in Casual Mode. Talk naturally and casually, like a friendly person. Be relaxed, approachable, and conversational without forcing slang. Explain things clearly, match the user's energy, and remain accurate. Do not sacrifice correctness for friendliness.`,
+  'deep-thinking':`You are SharkByte in Deep Thinking Mode. Carefully analyze the user's problem before answering. Break complex problems into logical steps, check assumptions, consider edge cases, and verify calculations where possible. Give a clear, well-reasoned answer with useful explanations. Do not claim certainty when uncertain. Do not reveal hidden private chain-of-thought; provide a concise explanation of the key reasoning and conclusions.`,
+  coder:`You are SharkByte in Coder Mode, an expert programming assistant. You may write, explain, debug, review, and improve code. Provide complete, runnable solutions when requested. Respect the user's language, framework, and constraints. Explain important changes, handle errors and edge cases, and never pretend code was executed unless it actually was.`,
+  bro:`You are SharkByte in BRO MODE.
+
+PERSONALITY:
+- Extremely casual, funny, playful, confident, and friendly. Talk like a close friend.
+- Use slang naturally: bro, dude, nah, yup, bet, fr, lowkey, highkey, bruh, wut, ur, tho, gonna.
+- Match the user's energy and use emojis when appropriate.
+- Challenge incorrect claims respectfully. Do not agree just to be nice.
+- Be accurate and helpful. Explain things when needed.
+
+STRICT STYLE:
+- Begin ordinary replies with: Yo wut up bro, followed by randomized punctuation.
+- Never use apostrophes.
+- Use ?? instead of ?.
+- Use !!! about 33 percent of the time and ! about 67 percent of the time.
+- Use plain text only. No Markdown, headings, bullets, numbered lists, tables, or code formatting.
+- Keep responses concise unless more detail is necessary.
+- If something is unclear, respond: huh??
+- If asked to write, generate, debug, edit, or explain code as an implementation, respond exactly: i dont know how to code!!!
+- Do not invent facts.
+
+The exact coding refusal takes priority over the greeting.`
+};
+
+const MODE_LABELS={
+  chat:'/chat',
+  casual:'/casual',
+  'deep-thinking':'/deep-thinking',
+  coder:'/coder',
+};
+
+let chats=loadChats();
+let chatsLoaded=false;
+let syncTimer=null;
+let currentId=null;
+let models=[];
+let runningModels=[];
+let busy=false;
+let aborter=null;
+let selectedMode=localStorage.getItem('sb-mode')||'chat';
+let modelsByMode=loadModeModels();
+let selectedModel=modelsByMode[selectedMode]||DEFAULT_MODELS[selectedMode]||'qwen3:0.6b';
+
+function loadChats(){
+  try{const v=JSON.parse(localStorage.getItem('sb-chats')||'[]');return Array.isArray(v)?v:[]}catch{return []}
+}
+async function loadSharedChats(){
+  try{
+    const res=await fetch('/api/chats',{cache:'no-store'});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    if(Array.isArray(data.chats)){
+      chats=data.chats.map(c=>({id:String(c.id),title:c.title||'Untitled chat',created:(c.created||c.updated||Date.now()),updated:(c.updated||Date.now()),messages:Array.isArray(c.messages)?c.messages:[]}));
+      chatsLoaded=true;
+      try{localStorage.setItem('sb-chats',JSON.stringify(chats))}catch{}
+      chats.sort((a,b)=>(b.updated||0)-(a.updated||0));
+      if(chats.length){currentId=chats[0].id;renderMessages();document.getElementById('crumb').textContent=active()?.title||'New chat'}
+      renderHistory();
+    }
+  }catch(e){chatsLoaded=false;toastStatus('Shared terminal history unavailable. Open the HTML through SharkByte local server.');}
+}
+
+function loadModeModels(){
+  try{const v=JSON.parse(localStorage.getItem('sb-models-by-mode')||'{}');return v&&typeof v==='object'?v:{}}catch{return {}}
+}
+function persist(){
+  chats.sort((a,b)=>(b.updated||b.created||0)-(a.updated||a.created||0));
+  // Keep a local safety copy, but the terminal's chats.json is the shared source of truth.
+  try{localStorage.setItem('sb-chats',JSON.stringify(chats))}catch{}
+  clearTimeout(syncTimer);
+  syncTimer=setTimeout(async()=>{
+    try{
+      const res=await fetch('/api/chats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chats})});
+      if(!res.ok)throw new Error('HTTP '+res.status);
+      toastStatus('Chats saved to shared SharkByte history.');
+    }catch(e){toastStatus('Could not sync with terminal history. Open this page from SharkByte, not as a file. '+e.message)}
+  },180);
+}
+function persistModeModels(){
+  try{localStorage.setItem('sb-models-by-mode',JSON.stringify(modelsByMode))}catch{}
+}
+function active(){return chats.find(c=>c.id===currentId)}
+function uid(){return 'chat-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toastStatus(s){document.getElementById('statusline').textContent=s}
+function setConnection(ok,msg){document.getElementById('dot').classList.toggle('ok',ok);document.getElementById('connectionText').textContent=msg}
+function titleFor(s){let t=s.replace(/\s+/g,' ').trim().split(' ').slice(0,7).join(' ');return t.length>52?t.slice(0,49)+'…':t||'New chat'}
+function ensureChat(first){
+  let c=active();
+  if(!c){c={id:uid(),title:titleFor(first),created:Date.now(),updated:Date.now(),messages:[]};chats.unshift(c);currentId=c.id}
+  return c;
+}
+function renderHistory(){
+  const el=document.getElementById('history');
+  el.innerHTML=chats.map(c=>`<button class="history-item ${c.id===currentId?'active':''}" onclick="openChat('${c.id}')"><span>▤</span><span class="history-title" title="${esc(c.title)}">${esc(c.title)}</span><span class="delete-chat" title="Delete chat" onclick="event.stopPropagation();deleteChat('${c.id}')">×</span></button>`).join('')||'<div class="empty">Your conversations will appear here.</div>';
+}
+function newChat(){
+  if(busy){toastStatus('Wait for the current response to finish first.');return}
+  currentId=null;
+  document.getElementById('messages').innerHTML='';
+  document.getElementById('welcome').style.display='';
+  document.getElementById('crumb').textContent='New chat';
+  document.getElementById('prompt').value='';
+  renderHistory();
+  document.getElementById('prompt').focus();
+}
+function openChat(id){
+  if(busy){toastStatus('Wait for the current response to finish first.');return}
+  currentId=id;
+  const c=active();
+  if(!c)return;
+  renderMessages();
+  renderHistory();
+  document.getElementById('crumb').textContent=c.title;
+}
+function deleteChat(id){
+  chats=chats.filter(c=>c.id!==id);
+  if(currentId===id){
+    currentId=null;
+    document.getElementById('messages').innerHTML='';
+    document.getElementById('welcome').style.display='';
+    document.getElementById('crumb').textContent='New chat';
+  }
+  persist();
+  renderHistory();
+}
+function deleteAllChats(){
+  if(!chats.length)return toastStatus('There are no saved chats to delete.');
+  if(!confirm('Permanently delete every saved chat in this browser?'))return;
+  chats=[];currentId=null;persist();renderHistory();renderMessages();
+  document.getElementById('crumb').textContent='New chat';
+  toastStatus('All browser-saved chats were deleted.');
+}
+function renameChat(){
+  const c=active();
+  if(!c)return toastStatus('Start a conversation before renaming it.');
+  const name=prompt('Rename conversation:',c.title);
+  if(name===null)return;
+  const clean=name.trim();
+  if(!clean)return toastStatus('A conversation name cannot be empty.');
+  c.title=clean.slice(0,80);c.updated=Date.now();
+  document.getElementById('crumb').textContent=c.title;
+  persist();renderHistory();toastStatus('Conversation renamed.');
+}
+function usePrompt(s){const p=document.getElementById('prompt');p.value=s;p.focus()}
+function setModeAndPrompt(mode,promptText){
+  if(busy){toastStatus('Wait for the current response to finish first.');return}
+  changeMode(mode);
+  usePrompt(promptText);
+}
+function changeMode(mode){
+  if(!MODE_PROMPTS[mode])return;
+  selectedMode=mode;
+  localStorage.setItem('sb-mode',selectedMode);
+  const remembered=modelsByMode[selectedMode];
+  if(remembered&&models.includes(remembered))selectedModel=remembered;
+  else if(models.includes(DEFAULT_MODELS[selectedMode]))selectedModel=DEFAULT_MODELS[selectedMode];
+  else if(!models.includes(selectedModel)&&models.length)selectedModel=models[0];
+  if(models.length)modelsByMode[selectedMode]=selectedModel;
+  persistModeModels();
+  renderSelectors();
+  updateModeHint();
+}
+function renderSelectors(){
+  const modeSelect=document.getElementById('modeSelect');
+  modeSelect.value=selectedMode;
+  const modelSelect=document.getElementById('modelSelect');
+  if(!models.length){
+    modelSelect.innerHTML='<option value="">No downloaded models found</option>';
+    modelSelect.disabled=true;
+    return;
+  }
+  modelSelect.disabled=false;
+  modelSelect.innerHTML=models.map(m=>`<option value="${esc(m)}">${esc(m)}${runningModels.includes(m)?' · running':''}</option>`).join('');
+  if(!models.includes(selectedModel))selectedModel=models[0];
+  modelSelect.value=selectedModel;
+}
+function updateModeHint(){
+  const hint=document.getElementById('modelHint');
+  const descriptions={
+    chat:'General assistant · selected local model',
+    casual:'Casual personality · selected local model',
+    'deep-thinking':'Deep reasoning · native thinking when supported',
+    coder:'Programming assistant · selected local model',
+    bro:'🔥 BRO MODE · chaos enabled'
+  };
+  hint.textContent=(descriptions[selectedMode]||'Local Ollama')+(selectedModel?' · '+selectedModel:'');
+}
+function onModelChange(){
+  selectedModel=document.getElementById('modelSelect').value;
+  modelsByMode[selectedMode]=selectedModel;
+  persistModeModels();
+  updateModeHint();
+}
+function renderMessages(){
+  const c=active(),box=document.getElementById('messages');
+  box.innerHTML='';
+  if(!c||!c.messages.length){document.getElementById('welcome').style.display='';return}
+  document.getElementById('welcome').style.display='none';
+  c.messages.forEach((m,i)=>drawMessage(m.text,m.who,i,true,m.thinking||''));
+}
+function addMessageTools(content,text){
+  const tools=document.createElement('div');tools.className='msgtools';
+  const cp=document.createElement('button');cp.textContent='▢ Copy';
+  cp.onclick=()=>navigator.clipboard?.writeText(text).then(()=>toastStatus('Copied message.')).catch(()=>toastStatus('Clipboard permission was unavailable.'));
+  const dl=document.createElement('button');dl.textContent='↓ Download';
+  dl.onclick=()=>downloadText(text,'SharkByte-message.md');
+  tools.append(cp,dl);content.append(tools);
+}
+function drawMessage(text,who,index,showTools=true,thinking=''){
+  const wrap=document.createElement('article');wrap.className='message '+(who==='user'?'user':'');
+  const av=document.createElement('div');av.className='avatar';av.textContent=who==='user'?'Y':'S';
+  const content=document.createElement('div');content.className='content';
+  const label=document.createElement('div');label.className='who';label.textContent=who==='user'?'You':'SharkByte · '+(MODE_LABELS[selectedMode]||'/chat');
+  const bubble=document.createElement('div');bubble.className='bubble';bubble.textContent=text;
+  content.append(label,bubble);
+  if(thinking){
+    const details=document.createElement('details');details.className='thinking-panel';
+    const summary=document.createElement('summary');summary.textContent='SHOW THINKING';
+    const body=document.createElement('div');body.className='thinking-text';body.textContent=thinking;
+    details.append(summary,body);content.append(details);
+  }
+  if(showTools&&who!=='user')addMessageTools(content,text);
+  wrap.append(av,content);document.getElementById('messages').append(wrap);
+  return {bubble,content,wrap};
+}
+function scrollBottom(){const s=document.getElementById('stage');s.scrollTo({top:s.scrollHeight,behavior:'smooth'})}
+function downloadText(text,name){
+  const a=document.createElement('a'),u=URL.createObjectURL(new Blob([text],{type:'text/markdown;charset=utf-8'}));
+  a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+async function refreshOllama(){
+  try{
+    const [tagsRes,psRes]=await Promise.all([fetch(OLLAMA+'/tags'),fetch(OLLAMA+'/ps')]);
+    if(!tagsRes.ok)throw new Error('Ollama /api/tags returned HTTP '+tagsRes.status);
+    const tags=await tagsRes.json();
+    models=(tags.models||[]).map(m=>m.name).filter(Boolean);
+    runningModels=psRes.ok?((await psRes.json()).models||[]).map(m=>m.name):[];
+    setConnection(true,'Ollama connected');
+    if(!models.length){
+      selectedModel='';
+      renderSelectors();
+      document.getElementById('modelHint').textContent='No downloaded Ollama models found';
+      return;
+    }
+    const remembered=modelsByMode[selectedMode];
+    if(remembered&&models.includes(remembered))selectedModel=remembered;
+    else if(models.includes(DEFAULT_MODELS[selectedMode]))selectedModel=DEFAULT_MODELS[selectedMode];
+    else if(!models.includes(selectedModel))selectedModel=models[0];
+    modelsByMode[selectedMode]=selectedModel;
+    persistModeModels();
+    renderSelectors();
+    updateModeHint();
+    document.getElementById('modelSelect').onchange=onModelChange;
+  }catch(e){
+    setConnection(false,'Ollama unavailable');
+    document.getElementById('modelSelect').innerHTML='<option value="">Ollama not connected</option>';
+    document.getElementById('modelSelect').disabled=true;
+    document.getElementById('modelHint').textContent='Start Ollama, then refresh this page';
+    toastStatus('Could not reach '+OLLAMA+'. If Ollama is running, its browser CORS setting may be blocking this page. Details: '+e.message);
+  }
+}
+function formatBroText(text){
+  if(selectedMode!=='bro')return text;
+
+  text=text.replace(/['’]/g,'');
+
+  // The coding refusal is intentionally exact, as required by Bro Mode.
+  if(text.trim()==='i dont know how to code!!!')return text.trim();
+
+  // Randomize each exclamation group: 33% !!! and 67% !.
+  text=text.replace(/!+/g,()=>Math.random()<1/3?'!!!':'!');
+
+  // Add the required greeting if the model did not provide it.
+  const greeting='Yo wut up bro';
+  if(!text.startsWith(greeting)){
+    text=greeting+(Math.random()<1/3?'!!!':'!')+' '+text;
+  }
+
+  // Randomize sentence starts: about 33% uppercase and 67% lowercase.
+  return text.replace(/(^|(?<=[.!?])\s+|\n+)([ \t]*)([A-Za-z])/g,
+    (match,prefix,space,letter)=>{
+      return prefix+space+(Math.random()<1/3?letter.toUpperCase():letter.toLowerCase());
+    }
+  );
+}
+async function sendMessage(){
+  const input=document.getElementById('prompt');
+  const text=input.value.trim();
+  if(!text||busy)return;
+  if(!selectedModel||!models.includes(selectedModel)){
+    toastStatus('No downloaded Ollama model is available. Start Ollama and refresh.');
+    return;
+  }
+  const c=ensureChat(text);
+  if(!c.messages.length)c.title=titleFor(text);
+  c.messages.push({who:'user',text,at:Date.now(),mode:selectedMode,model:selectedModel});
+  document.getElementById('welcome').style.display='none';
+  drawMessage(text,'user',c.messages.length-1,false);
+  input.value='';
+  document.getElementById('crumb').textContent=c.title;
+  renderHistory();
+  busy=true;
+  aborter=new AbortController();
+  document.getElementById('sendBtn').disabled=true;
+  toastStatus('SharkByte is thinking…');
+  const assistant={who:'assistant',text:'',thinking:'',at:Date.now(),mode:selectedMode,model:selectedModel};
+  c.messages.push(assistant);
+  const rendered=drawMessage('','assistant',c.messages.length-1,false);
+  const bubble=rendered.bubble;
+  try{
+    const prior=c.messages.slice(0,-2).filter(m=>m.text).slice(-50).map(m=>({role:m.who==='user'?'user':'assistant',content:m.text}));
+    const requestBody={
+      model:selectedModel,
+      messages:[{role:'system',content:MODE_PROMPTS[selectedMode]||MODE_PROMPTS.chat},...prior,{role:'user',content:text}],
+      stream:true,
+      options:{temperature:selectedMode==='deep-thinking'?0.4:selectedMode==='bro'?0.85:0.7}
+    };
+    // Ollama native thinking is supported by Qwen3. Other selected models still
+    // receive the Deep Thinking system prompt, but may not expose a thinking stream.
+    if(selectedMode==='deep-thinking'&&/^qwen3(?::|$)/i.test(selectedModel))requestBody.think=true;
+
+    const response=await fetch(OLLAMA+'/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(requestBody),
+      signal:aborter.signal
+    });
+    if(!response.ok)throw new Error('Ollama returned HTTP '+response.status+': '+(await response.text()).slice(0,500));
+    const reader=response.body.getReader(),decoder=new TextDecoder();
+    let buffer='';
+    while(true){
+      const {value,done}=await reader.read();
+      if(done)break;
+      buffer+=decoder.decode(value,{stream:true});
+      const lines=buffer.split('\n');buffer=lines.pop();
+      for(const line of lines){
+        if(!line.trim())continue;
+        const data=JSON.parse(line);
+        if(data.error)throw new Error(data.error);
+        const piece=data.message?.content||'';
+        const thinkingPiece=data.message?.thinking||'';
+        if(thinkingPiece){
+          assistant.thinking+=thinkingPiece;
+          renderThinking(rendered.content,assistant.thinking);
+        }
+        if(piece){
+          assistant.text+=piece;
+          bubble.textContent=assistant.text;
+          scrollBottom();
+        }
+        if(data.done)break;
+      }
+    }
+    if(buffer.trim()){
+      const data=JSON.parse(buffer);
+      if(data.message?.thinking){
+        assistant.thinking+=data.message.thinking;
+        renderThinking(rendered.content,assistant.thinking);
+      }
+      if(data.message?.content){
+        assistant.text+=data.message.content;
+        bubble.textContent=assistant.text;
+      }
+    }
+    if(!assistant.text)assistant.text='(The model returned an empty response.)';
+    if(selectedMode==='bro'){
+      assistant.text=formatBroText(assistant.text);
+      bubble.textContent=assistant.text;
+    }
+  }catch(e){
+    if(e.name==='AbortError')assistant.text='[Response cancelled.]';
+    else assistant.text='Could not get a response from local Ollama.\n\n'+e.message+'\n\nIf this is a browser CORS error, configure Ollama to allow the origin serving this HTML, then restart Ollama.';
+    bubble.textContent=assistant.text;
+    toastStatus('Request ended with an error.');
+  }finally{
+    busy=false;aborter=null;
+    addMessageTools(rendered.content,assistant.text);
+    document.getElementById('sendBtn').disabled=false;
+    c.updated=Date.now();persist();renderHistory();
+    toastStatus('Ready · '+selectedModel+' · '+MODE_LABELS[selectedMode]);
+    scrollBottom();
+  }
+}
+function renderThinking(content,thinking){
+  let details=content.querySelector('.thinking-panel');
+  if(!details){
+    details=document.createElement('details');details.className='thinking-panel';
+    const summary=document.createElement('summary');summary.textContent='SHOW THINKING';
+    const body=document.createElement('div');body.className='thinking-text';
+    details.append(summary,body);
+    const bubble=content.querySelector('.bubble');
+    bubble.insertAdjacentElement('afterend',details);
+  }
+  details.querySelector('.thinking-text').textContent=thinking;
+}
+document.getElementById('prompt').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}
+});
+document.getElementById('modeSelect').addEventListener('change',e=>{
+  if(busy){e.target.value=selectedMode;toastStatus('Wait for the current response to finish first.');return}
+  changeMode(e.target.value);
+  toastStatus('Mode changed to '+MODE_LABELS[selectedMode]+'.');
+});
+function toggleTheme(){
+  const next=document.body.dataset.theme==='dark'?'light':'dark';
+  document.body.dataset.theme=next;
+  localStorage.setItem('sb-theme',next);
+  document.getElementById('themeBtn').textContent=next==='dark'?'☼':'☾';
+}
+async function init(){
+  await loadSharedChats();
+  const theme=localStorage.getItem('sb-theme')||'dark';
+  document.body.dataset.theme=theme==='light'?'light':'dark';
+  document.getElementById('themeBtn').textContent=theme==='light'?'☾':'☼';
+  document.getElementById('modeSelect').value=selectedMode;
+  if(!MODE_PROMPTS[selectedMode])selectedMode='chat';
+  if(chats.length){
+    chats.sort((a,b)=>(b.updated||b.created||0)-(a.updated||a.created||0));
+    currentId=chats[0].id;
+    document.getElementById('crumb').textContent=active()?.title||'New chat';
+    renderMessages();
+  }
+  renderHistory();
+  refreshOllama();
+  setInterval(refreshOllama,15000);
+}
+init();
+</script>
+</body>
+</html>
