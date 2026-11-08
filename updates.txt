@@ -1,0 +1,7 @@
+Version: 1.0.0
+
+What's new:
+- Describe the changes in this release here, one per line.
+
+(Upload this file to the GitHub repo. /update reads the first "Version: X.Y.Z" line to find the latest version,
+and compares it with version.txt next to app.py.)
